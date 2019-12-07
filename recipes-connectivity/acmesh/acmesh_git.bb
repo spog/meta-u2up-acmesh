@@ -7,6 +7,8 @@ LIC_FILES_CHKSUM = "file://git/LICENSE.md;md5=1ebbd3e34237af26da5dc08a4e440464"
 PV = "2.8.4+git${SRCPV}"
 SRCREV = "aac9f089d9c63cd753ac9dd9ab3b52e9cd6af3d8"
 SRC_URI = "git://github.com/Neilpang/acme.sh.git;branch=master \
+	   file://acmesh-install.sh \
+	   file://acmesh-show-config.patch \
 "
 SRC_URI[md5sum] = "5ef954d9b6b244ffeabcd226be1867a0"
 SRC_URI[sha256sum] = "039ad56ea6d6553aadf33243ea5b39802d73519e46a89c80c648b2bd1ec78aeb"
@@ -43,6 +45,7 @@ do_install () {
 	cp -a git ${D}${datadir}/acme
 	rm -rf ${D}${datadir}/acme/.git
 	rm -rf ${D}${datadir}/acme/.github
+	install -p -m 755 acmesh-install.sh ${D}${datadir}/acme/
 
 	# The new users and groups are created before the do_install
 	# step, so you are now free to make use of them:
