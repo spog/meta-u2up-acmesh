@@ -1,0 +1,69 @@
+diff --git a/git/acme.sh b/git/acme.sh
+index 4d4957f..cb8db7f 100755
+--- a/git/acme.sh
++++ b/git/acme.sh
+@@ -6156,6 +6156,36 @@ setnotify() {
+ 
+ }
+ 
++showconfig() {
++  echo "Configuration ($PROJECT - v$VER):"
++  echo "--home=$LE_WORKING_DIR"
++  echo "--config-home=$LE_CONFIG_HOME"
++  if [ -z "$ACCOUNT_CONF_PATH" ]; then
++    echo "--accountconf=$_DEFAULT_ACCOUNT_CONF_PATH"
++  else
++    echo "--accountconf=$ACCOUNT_CONF_PATH"
++    if [ -f "$ACCOUNT_CONF_PATH" ]; then
++      source $ACCOUNT_CONF_PATH
++    fi
++  fi
++  if [ -n "$ACCOUNT_KEY_PATH" ]; then
++    echo "--accountkey=$ACCOUNT_KEY_PATH"
++  else
++    echo "--accountkey=$_DEFAULT_ACCOUNT_KEY_PATH"
++  fi
++  if [ -n "$CERT_HOME" ]; then
++    echo "--cert-home=$CERT_HOME"
++  else
++    echo "--cert-home=$_DEFAULT_CERT_HOME"
++  fi
++  echo "--accountemail=$ACCOUNT_EMAIL"
++  if [ -n "$USER_AGENT" ]; then
++    echo "--useragent=$USER_AGENT"
++  else
++    echo "--useragent=$DEFAULT_USER_AGENT"
++  fi
++}
++
+ showhelp() {
+   _initpath
+   version
+@@ -6189,6 +6219,7 @@ Commands:
+   --createCSR, -ccsr       Create CSR , professional use.
+   --deactivate             Deactivate the domain authz, professional use.
+   --set-notify             Set the cron notification hook, level or mode.
++  --show-config            Show current configuration settings.
+ 
+ 
+ Parameters:
+@@ -6512,6 +6543,9 @@ _process() {
+       --set-notify)
+         _CMD="setnotify"
+         ;;
++      --show-config)
++        _CMD="showconfig"
++        ;;
+       --domain | -d)
+         _dvalue="$2"
+ 
+@@ -7023,6 +7057,9 @@ _process() {
+     setnotify)
+       setnotify "$_notify_hook" "$_notify_level" "$_notify_mode"
+       ;;
++    showconfig)
++      showconfig
++      ;;
+     *)
+       if [ "$_CMD" ]; then
+         _err "Invalid command: $_CMD"
